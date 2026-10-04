@@ -6,68 +6,41 @@
   <title>Focus Room</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Caveat:wght@600&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-
-  <header class="nav">
-    <a class="logo" href="/"><span class="dot"></span>focus room</a>
-    <nav>
-      <a href="#how">How it works</a>
-      <a href="#join" class="nav-btn">Join a room</a>
-    </nav>
+  <header class="top">
+    <a class="logo" href="/">focus room</a>
+    <span class="scribble">no signup, no app</span>
   </header>
 
   <main>
     <section class="hero">
-      <div class="hero-text">
-        <p class="tag">free · no signup</p>
-        <h1>Study alone.<br><span class="highlight">Together.</span></h1>
-        <p class="lead">
-          Pick a room, start your timer, and see who else is deep in focus right now.
-          It's like a library table, without leaving your house.
-        </p>
+      <div>
+        <h1>Study alone, together.</h1>
+        <p class="lead">Pick a room code, start a timer, and watch your friends' sticky notes light up as they settle in to work. Like a library table you can join from your bed.</p>
       </div>
 
-      <div class="join-card" id="join">
+      <div class="index-card" id="join">
         <h2>Grab a seat</h2>
         <label for="name">Your name</label>
-        <input id="name" type="text" placeholder="e.g. Alex">
-
+        <input id="name" maxlength="20" placeholder="Alex">
         <label for="room">Room code</label>
-        <input id="room" type="text" placeholder="e.g. math-club">
-
-        <button id="join-btn">Join the room →</button>
-        <p class="small">New code = new room. Share it with friends.</p>
+        <input id="room" maxlength="30" placeholder="math-club">
+        <button id="join-btn" class="btn">Join the room</button>
+        <p class="note">New code, new room. Send it to a friend and you're in the same one.</p>
       </div>
     </section>
 
-    <section class="how" id="how">
-      <h2>How it works</h2>
-      <div class="steps">
-        <div class="step">
-          <span class="num">1</span>
-          <h3>Pick a room</h3>
-          <p>Make up any code. Tell your friends the same one.</p>
-        </div>
-        <div class="step">
-          <span class="num">2</span>
-          <h3>Start your timer</h3>
-          <p>25 minutes of focus, then a short break. Repeat.</p>
-        </div>
-        <div class="step">
-          <span class="num">3</span>
-          <h3>See everyone live</h3>
-          <p>Watch who's focusing and who's on a break, in real time.</p>
-        </div>
-      </div>
+    <section class="steps">
+      <div class="sticky s1"><b>1.</b> Make up a room code and tell your friends.</div>
+      <div class="sticky s2"><b>2.</b> Say what you're working on, then hit start.</div>
+      <div class="sticky s3"><b>3.</b> Everyone sees who's focusing, live.</div>
     </section>
   </main>
 
-  <footer>
-    Made with too much coffee for Hack Club's PIXL.
-  </footer>
-
+  <footer>Built for Hack Club's PIXL.</footer>
+  <script src="{{ url_for('static', filename='home.js') }}"></script>
 </body>
 </html>
