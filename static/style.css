@@ -1,0 +1,186 @@
+/* ---------- Colors & fonts (change these to restyle everything) ---------- */
+:root {
+  --paper: #f6f1e7;      /* warm cream background */
+  --ink: #1f1b16;        /* near-black text */
+  --accent: #d9562b;     /* terracotta orange */
+  --sun: #f2c14e;        /* yellow highlight */
+  --muted: #6b6258;
+  --serif: "Fraunces", Georgia, serif;
+  --sans: "Inter", -apple-system, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.6;
+}
+
+/* ---------- Header ---------- */
+.nav {
+  max-width: 1050px;
+  margin: 0 auto;
+  padding: 24px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.logo {
+  font-family: var(--serif);
+  font-weight: 800;
+  font-size: 1.4rem;
+  color: var(--ink);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.dot {
+  width: 12px; height: 12px;
+  background: var(--accent);
+  border-radius: 50%;
+}
+.nav nav { display: flex; align-items: center; gap: 24px; }
+.nav nav a {
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 500;
+}
+.nav-btn {
+  border: 2px solid var(--ink);
+  padding: 8px 16px;
+  border-radius: 999px;
+}
+.nav-btn:hover { background: var(--ink); color: var(--paper) !important; }
+
+/* ---------- Hero ---------- */
+.hero {
+  max-width: 1050px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+.tag {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+h1 {
+  font-family: var(--serif);
+  font-weight: 800;
+  font-size: clamp(2.8rem, 6vw, 4.6rem);
+  line-height: 1.05;
+  margin-bottom: 20px;
+}
+.highlight {
+  background: linear-gradient(transparent 60%, var(--sun) 60%);  /* marker-pen underline */
+  padding: 0 4px;
+}
+.lead {
+  font-size: 1.15rem;
+  color: var(--muted);
+  max-width: 480px;
+}
+
+/* ---------- Join card ---------- */
+.join-card {
+  background: #fffdf8;
+  border: 2px solid var(--ink);
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: 8px 8px 0 var(--ink);   /* hard shadow = hand-made feel */
+  transform: rotate(1.5deg);          /* slightly tilted */
+}
+.join-card h2 {
+  font-family: var(--serif);
+  font-size: 1.7rem;
+  margin-bottom: 8px;
+}
+label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin: 16px 0 6px;
+}
+input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  background: white;
+  font-family: var(--sans);
+  font-size: 1rem;
+}
+input:focus { outline: 3px solid var(--sun); }
+
+button {
+  width: 100%;
+  margin-top: 22px;
+  padding: 14px;
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  background: var(--accent);
+  color: white;
+  font-family: var(--sans);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 4px 4px 0 var(--ink);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+button:hover { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--ink); }
+button:active { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--ink); }
+
+.small { font-size: 0.8rem; color: var(--muted); margin-top: 14px; }
+
+/* ---------- How it works ---------- */
+.how {
+  max-width: 1050px;
+  margin: 0 auto;
+  padding: 40px 24px 90px;
+}
+.how h2 {
+  font-family: var(--serif);
+  font-size: 2.2rem;
+  margin-bottom: 36px;
+}
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+.num {
+  font-family: var(--serif);
+  font-weight: 800;
+  font-size: 3.5rem;
+  color: var(--accent);
+  line-height: 1;
+}
+.step h3 { font-size: 1.2rem; margin: 8px 0 6px; }
+.step p { color: var(--muted); }
+
+/* ---------- Footer ---------- */
+footer {
+  text-align: center;
+  padding: 32px 24px;
+  border-top: 2px solid var(--ink);
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* ---------- Phones ---------- */
+@media (max-width: 800px) {
+  .hero { grid-template-columns: 1fr; gap: 40px; }
+  .steps { grid-template-columns: 1fr; }
+  .join-card { transform: none; }
+}

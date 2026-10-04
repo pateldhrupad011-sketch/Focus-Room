@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Focus Room</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <header class="nav">
+    <a class="logo" href="/"><span class="dot"></span>focus room</a>
+    <nav>
+      <a href="#how">How it works</a>
+      <a href="#join" class="nav-btn">Join a room</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-text">
+        <p class="tag">free · no signup</p>
+        <h1>Study alone.<br><span class="highlight">Together.</span></h1>
+        <p class="lead">
+          Pick a room, start your timer, and see who else is deep in focus right now.
+          It's like a library table, without leaving your house.
+        </p>
+      </div>
+
+      <div class="join-card" id="join">
+        <h2>Grab a seat</h2>
+        <label for="name">Your name</label>
+        <input id="name" type="text" placeholder="e.g. Alex">
+
+        <label for="room">Room code</label>
+        <input id="room" type="text" placeholder="e.g. math-club">
+
+        <button id="join-btn">Join the room →</button>
+        <p class="small">New code = new room. Share it with friends.</p>
+      </div>
+    </section>
+
+    <section class="how" id="how">
+      <h2>How it works</h2>
+      <div class="steps">
+        <div class="step">
+          <span class="num">1</span>
+          <h3>Pick a room</h3>
+          <p>Make up any code. Tell your friends the same one.</p>
+        </div>
+        <div class="step">
+          <span class="num">2</span>
+          <h3>Start your timer</h3>
+          <p>25 minutes of focus, then a short break. Repeat.</p>
+        </div>
+        <div class="step">
+          <span class="num">3</span>
+          <h3>See everyone live</h3>
+          <p>Watch who's focusing and who's on a break, in real time.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Made with too much coffee for Hack Club's PIXL.
+  </footer>
+
+</body>
+</html>
