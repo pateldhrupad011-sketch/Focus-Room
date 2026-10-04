@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Room {{ code }} · Focus Room</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <header class="nav">
+    <a class="logo" href="/"><span class="dot"></span>focus room</a>
+    <nav><a href="/" class="nav-btn">Leave room</a></nav>
+  </header>
+
+  <main class="room">
+    <p class="tag">Room: {{ code }}</p>
+    <h1 class="room-title">Hi {{ name }}, ready to focus?</h1>
+
+    <div class="timer-card">
+      <div class="modes">
+        <button class="mode active" data-mode="focus" data-minutes="25">Focus</button>
+        <button class="mode" data-mode="break" data-minutes="5">Break</button>
+      </div>
+
+      <div id="time">25:00</div>
+
+      <div class="controls">
+        <button id="start">Start</button>
+        <button id="reset" class="ghost">Reset</button>
+      </div>
+    </div>
+
+    <div class="people-card">
+      <h2>In this room (<span id="count">0</span>)</h2>
+      <ul id="people"></ul>
+    </div>
+  </main>
+
+  <!-- Hand the room code and name from Python to JavaScript -->
+  <script>
+    const ROOM = {{ code|tojson }};
+    const NAME = {{ name|tojson }};
+  </script>
+  <!-- The walkie-talkie library -->
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  <script src="{{ url_for('static', filename='room.js') }}"></script>
+</body>
+</html>

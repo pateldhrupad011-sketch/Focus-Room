@@ -1,9 +1,9 @@
 /* ---------- Colors & fonts (change these to restyle everything) ---------- */
 :root {
-  --paper: #f6f1e7;      /* warm cream background */
-  --ink: #1f1b16;        /* near-black text */
-  --accent: #d9562b;     /* terracotta orange */
-  --sun: #f2c14e;        /* yellow highlight */
+  --paper: #f6f1e7;
+  --ink: #1f1b16;
+  --accent: #d9562b;
+  --sun: #f2c14e;
   --muted: #6b6258;
   --serif: "Fraunces", Georgia, serif;
   --sans: "Inter", -apple-system, sans-serif;
@@ -83,7 +83,7 @@ h1 {
   margin-bottom: 20px;
 }
 .highlight {
-  background: linear-gradient(transparent 60%, var(--sun) 60%);  /* marker-pen underline */
+  background: linear-gradient(transparent 60%, var(--sun) 60%);
   padding: 0 4px;
 }
 .lead {
@@ -98,89 +98,3 @@ h1 {
   border: 2px solid var(--ink);
   border-radius: 20px;
   padding: 32px;
-  box-shadow: 8px 8px 0 var(--ink);   /* hard shadow = hand-made feel */
-  transform: rotate(1.5deg);          /* slightly tilted */
-}
-.join-card h2 {
-  font-family: var(--serif);
-  font-size: 1.7rem;
-  margin-bottom: 8px;
-}
-label {
-  display: block;
-  font-size: 0.85rem;
-  font-weight: 600;
-  margin: 16px 0 6px;
-}
-input {
-  width: 100%;
-  padding: 12px 14px;
-  border: 2px solid var(--ink);
-  border-radius: 10px;
-  background: white;
-  font-family: var(--sans);
-  font-size: 1rem;
-}
-input:focus { outline: 3px solid var(--sun); }
-
-button {
-  width: 100%;
-  margin-top: 22px;
-  padding: 14px;
-  border: 2px solid var(--ink);
-  border-radius: 10px;
-  background: var(--accent);
-  color: white;
-  font-family: var(--sans);
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: 4px 4px 0 var(--ink);
-  transition: transform 0.1s, box-shadow 0.1s;
-}
-button:hover { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--ink); }
-button:active { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--ink); }
-
-.small { font-size: 0.8rem; color: var(--muted); margin-top: 14px; }
-
-/* ---------- How it works ---------- */
-.how {
-  max-width: 1050px;
-  margin: 0 auto;
-  padding: 40px 24px 90px;
-}
-.how h2 {
-  font-family: var(--serif);
-  font-size: 2.2rem;
-  margin-bottom: 36px;
-}
-.steps {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 32px;
-}
-.num {
-  font-family: var(--serif);
-  font-weight: 800;
-  font-size: 3.5rem;
-  color: var(--accent);
-  line-height: 1;
-}
-.step h3 { font-size: 1.2rem; margin: 8px 0 6px; }
-.step p { color: var(--muted); }
-
-/* ---------- Footer ---------- */
-footer {
-  text-align: center;
-  padding: 32px 24px;
-  border-top: 2px solid var(--ink);
-  color: var(--muted);
-  font-size: 0.9rem;
-}
-
-/* ---------- Phones ---------- */
-@media (max-width: 800px) {
-  .hero { grid-template-columns: 1fr; gap: 40px; }
-  .steps { grid-template-columns: 1fr; }
-  .join-card { transform: none; }
-}
