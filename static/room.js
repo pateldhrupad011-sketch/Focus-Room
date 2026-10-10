@@ -1,112 +1,95 @@
-const socket = io();   // pick up the walkie-talkie
+const $ = id => document.getElementById(id);
+const invite = () => navigator.clipboard.writeText(location.origin + "/room/" + encodeURIComponent(ROOM))
+  .then(() => { $("invite").textContent = "Copied!"; setTimeout(() => $("invite").textContent = "Copy invite link", 1500); });
+$("invite").addEventListener("click", invite);
 
-const timeEl = document.getElementById("time");
-const startBtn = document.getElementById("start");
-const resetBtn = document.getElementById("reset");
-const modeBtns = document.querySelectorAll(".mode");
-const listEl = document.getElementById("people");
-const countEl = document.getElementById("count");
+if (!NAME) {
+  const enter = () => {
+    const n = $("gate-name").value.trim();
+    if (n) location.href = location.pathname + "?name=" + encodeURIComponent(n);
+  };
+  $("gate-btn").addEventListener("click", enter);
+  $("gate-name").addEventListener("keydown", e => e.key === "Enter" && enter());
+} else {
+  const socket = io();
+  let mode = "focusing", total = 25 * 60, left = total, endAt = 0, timer = null, people = [], audio = null;
 
-let mode = "focus";               // "focus" or "break"
-let minutes = 25;
-let secondsLeft = minutes * 60;
-let timerId = null;
-let endTime = null;
-let status = "idle";              // what we tell everyone we're doing
+  const fmt = s => String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0");
+  const status = () => timer ? mode : "idle";
+  const tell = () => socket.emit("update", { status: status(), task: $("task").value, left });
 
-// ---------- Walkie-talkie ----------
-
-function setStatus(newStatus) {
-  status = newStatus;
-  socket.emit("status", { status: status });    // tell the server
-}
-
-// Runs when we connect (and again if the connection drops and comes back)
-socket.on("connect", () => {
-  socket.emit("join", { room: ROOM, name: NAME, status: status });
-});
-
-const LABELS = { focusing: "Focusing", break: "On a break", idle: "Just chilling" };
-
-// The server sends us the updated list of people
-socket.on("roster", (people) => {
-  listEl.innerHTML = "";
-  countEl.textContent = people.length;
-
-  people.forEach((p) => {
-    const li = document.createElement("li");
-
-    const dot = document.createElement("span");
-    dot.className = "pdot " + p.status;
-
-    const name = document.createElement("span");
-    name.className = "pname";
-    name.textContent = p.name;          // textContent keeps it safe from sneaky HTML
-
-    const st = document.createElement("span");
-    st.className = "pstatus";
-    st.textContent = LABELS[p.status] || "";
-
-    li.append(dot, name, st);
-    listEl.appendChild(li);
-  });
-});
-
-// ---------- Timer ----------
-
-function render() {
-  const m = String(Math.floor(secondsLeft / 60)).padStart(2, "0");
-  const s = String(secondsLeft % 60).padStart(2, "0");
-  timeEl.textContent = m + ":" + s;
-  document.title = m + ":" + s + " · Focus Room";
-}
-
-function tick() {
-  secondsLeft = Math.max(0, Math.round((endTime - Date.now()) / 1000));
-  render();
-  if (secondsLeft === 0) {
-    pause();
-    timeEl.classList.add("done");
+  function draw() {
+    $("time").textContent = fmt(left);
+    $("fill").style.width = (100 - (left / total) * 100) + "%";
+    document.title = (timer ? fmt(left) + " | " : "") + ROOM;
   }
-}
 
-function start() {
-  endTime = Date.now() + secondsLeft * 1000;
-  timerId = setInterval(tick, 250);
-  startBtn.textContent = "Pause";
-  timeEl.classList.remove("done");
-  setStatus(mode === "focus" ? "focusing" : "break");   // tell everyone!
-}
+  function beep() {
+    if (!audio) return;
+    [660, 880].forEach((f, i) => {
+      const o = audio.createOscillator(), g = audio.createGain();
+      o.frequency.value = f; o.connect(g); g.connect(audio.destination);
+      g.gain.setValueAtTime(0.2, audio.currentTime + i * 0.25);
+      g.gain.exponentialRampToValueAtTime(0.001, audio.currentTime + i * 0.25 + 0.4);
+      o.start(audio.currentTime + i * 0.25); o.stop(audio.currentTime + i * 0.25 + 0.4);
+    });
+  }
 
-function pause() {
-  clearInterval(timerId);
-  timerId = null;
-  startBtn.textContent = "Start";
-  setStatus("idle");                                    // tell everyone!
-}
+  function stop() { clearInterval(timer); timer = null; $("start").textContent = "Start"; }
 
-startBtn.addEventListener("click", () => {
-  if (timerId) { pause(); } else { start(); }
-});
+  function start() {
+    audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+    endAt = Date.now() + left * 1000;
+    timer = setInterval(() => {
+      left = Math.max(0, Math.round((endAt - Date.now()) / 1000));
+      draw();
+      if (left === 0) { stop(); beep(); tell(); }
+    }, 250);
+    $("start").textContent = "Pause";
+  }
 
-resetBtn.addEventListener("click", () => {
-  pause();
-  secondsLeft = minutes * 60;
-  timeEl.classList.remove("done");
-  render();
-});
+  $("start").addEventListener("click", () => { timer ? stop() : start(); tell(); draw(); });
+  $("reset").addEventListener("click", () => { stop(); left = total; draw(); tell(); });
+  $("task").addEventListener("change", tell);
 
-modeBtns.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    modeBtns.forEach((b) => b.classList.remove("active"));
-    btn.classList.add("active");
-    mode = btn.dataset.mode;
-    minutes = Number(btn.dataset.minutes);
-    pause();
-    secondsLeft = minutes * 60;
-    timeEl.classList.remove("done");
-    render();
+  document.querySelectorAll(".mode").forEach(b => b.addEventListener("click", () => {
+    document.querySelectorAll(".mode").forEach(x => x.classList.remove("on"));
+    b.classList.add("on");
+    mode = b.dataset.mode; total = left = Number(b.dataset.min) * 60;
+    stop(); draw(); tell();
+  }));
+
+  socket.on("connect", () => {
+    socket.emit("join", { room: ROOM, name: NAME, task: $("task").value });
+    tell();
   });
-});
 
-render();
+  const LABEL = { focusing: "focusing", break: "on a break", idle: "just here" };
+  socket.on("roster", list => { people = list.map(p => ({ ...p, at: Date.now() })); paint(); });
+
+  function paint() {
+    $("count").textContent = people.length;
+    $("board").innerHTML = "";
+    people.forEach((p, i) => {
+      const n = document.createElement("div");
+      n.className = "sticky " + p.status;
+      n.style.setProperty("--tilt", ((i * 37) % 7 - 3) * 0.7 + "deg");
+      const nm = document.createElement("b"); nm.textContent = p.name;
+      const tk = document.createElement("p"); tk.className = "task"; tk.textContent = p.task || "...";
+      const st = document.createElement("span"); st.className = "st"; st.dataset.i = i;
+      n.append(nm, tk, st);
+      $("board").appendChild(n);
+    });
+    tickNotes();
+  }
+
+  function tickNotes() {
+    document.querySelectorAll(".st").forEach(el => {
+      const p = people[el.dataset.i];
+      const r = Math.max(0, p.left - Math.floor((Date.now() - p.at) / 1000));
+      el.textContent = p.status === "idle" ? LABEL.idle : LABEL[p.status] + ", " + fmt(r) + " left";
+    });
+  }
+  setInterval(tickNotes, 1000);
+  draw();
+}
